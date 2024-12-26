@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('etudiant_id')->constrained('Etudiants')->onDelete('cascade');
             $table->foreignId('ec_id')->constrained('elements_constitutifs')->onDelete('cascade');;
-            $table->float('note');
-            $table->string('session');
+            $table->float('note', 4, 2)->unsigned()->comment('valeur note comprise entre 0 et 20');
+            $table->enum('session',['normale','rattrapage']);
             $table->date('date_evaluation');
             $table->timestamps();
         });
