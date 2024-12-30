@@ -1,5 +1,6 @@
 <?php
-
+use App\Http\Controllers\NoteController;
+use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,4 +18,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Route::resource('note', NoteController::class)
+//     ->only(['index', 'store', 'edit', 'update', 'destroy'])
+//     ->middleware(['auth', 'verified']);
+Route::get('/note', [NoteController::class, 'index'])->name('note');
+Route::get('/note/create', [NoteController::class, 'create'])->name('notes.create');
+Route::post('/note', [NoteController::class, 'store'])->name('notes.store');
 require __DIR__.'/auth.php';
