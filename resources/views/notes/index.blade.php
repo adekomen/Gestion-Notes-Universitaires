@@ -4,6 +4,8 @@
 <div class="container">
     <h1>Liste des notes</h1>
     <a href="{{ route('notes.create') }}">Ajouter une note</a>
+    <a class="btn btn-sm btn-success" href="{{ route('etudiants.create') }}">Ajouter un étudiant</a>
+
     <table class="table">
         <thead>
             <tr>
@@ -21,7 +23,7 @@
                 <td>{{ $note->note }}</td>
                 <td>
                     <a href="{{ route('notes.edit', $note->id) }}">Modifier</a>
-                    <a href="{{ route('notes.delete', $note->id) }}">Supprimer</a>
+                    <a href="{{ route('notes.destroy', $note->id) }}">Supprimer</a>
                 </td>
             </tr>
             @endforeach

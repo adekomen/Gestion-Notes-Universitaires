@@ -34,7 +34,8 @@ class NoteController extends Controller
      */
     public function store(Request $request): View
     {
-        $validated = $request->validate([
+        //dd($request->all());
+        $validatedData = $request->validate([
 
             'etudiant_id' => 'required|exists:etudiants,id',
              'ec_id' => 'required|exists:elements_constitutifs,id',
@@ -42,8 +43,8 @@ class NoteController extends Controller
              'session' =>'required|string|max:3',
              'date_evaluation'=>'required|decimal',
            ]);
-          //   dd($validated_request);
-           Note::create($validated);
+          //   dd($validated);
+           Note::create($validatedData);
            return redirect()->route('notes.index');
     }
 
@@ -52,7 +53,7 @@ class NoteController extends Controller
      */
     public function show(Note $note)
     {
-        $note=Note::find($id);
+     //   $note=Note::find($id);
         return view('notes.show' ,compact('note'));;
     }
 
@@ -61,14 +62,14 @@ class NoteController extends Controller
      */
     public function edit(Note $note): View
     {
-        $note=Note::find($id);
+        //$note=Note::find($id);
         return view('notes.edit' ,compact('note'));;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Note $note): RedirectResponse
+    public function update(Request $request, $id): RedirectResponse
     {
         $validated = $request->validate([
 
@@ -89,8 +90,8 @@ class NoteController extends Controller
      */
     public function destroy(Note $note): RedirectResponse
     {
-        $note=Note::find($id);
-        $room->delete();
+      //  $note=Note::find($id);
+        $note->delete();
         return redirect()->route('notes.index');
     }
 }

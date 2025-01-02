@@ -6,7 +6,7 @@
             <label for="etudiant" class="block text-sm font-medium text-gray-700 mb-2">Étudiant</label>
             <select name="etudiant_id" id="etudiant" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                 @foreach($etudiants as $etudiant)
-                    <option value="{{ $etudiant->id }}">{{ $etudiant->name }}</option>
+                <option value="{{ $etudiant->id }}">{{ $etudiant->id }} - {{ $etudiant->name }}</option>
                 @endforeach
             </select>
         </div>

@@ -1,7 +1,7 @@
 <body>
     <div class="container-xl">
         <div class="card">
-            <h2 style="text-align: center; padding-top: 10px;">Détails de nte d'un étudiant</h2>
+            <h2 style="text-align: center; padding-top: 10px;">Détails de note d'un étudiant</h2>
             <div class="card-body">
                 <div>
                     <p class="label">Nom </p>
