@@ -3,11 +3,9 @@
 use App\Http\Controllers\ElementsConstitutifController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UnitesEnseignementController;
-<<<<<<< HEAD
 
-=======
+
 use App\Http\Controllers\DashboardController;
->>>>>>> ADESU-Chef
 use Illuminate\Support\Facades\Route;
 
 

@@ -19,4 +19,8 @@ class Etudiant extends Model
     {
         return $this->hasMany(Note::class, 'etudiant_id');
     }
+    public function calculateAverage()
+    {
+    return $this->grades()->avg('grade');
+    }
 }
