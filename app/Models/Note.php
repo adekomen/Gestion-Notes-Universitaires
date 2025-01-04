@@ -28,4 +28,9 @@ class Note extends Model
     {
         return $this->belongsTo(Elements_Constitutif::class, 'ec_id');
     }
+
+    public function ue()
+    {
+        return $this->ec->ue();
+    }
 }

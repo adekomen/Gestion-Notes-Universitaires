@@ -15,7 +15,7 @@ class NoteController extends Controller
      */
     public function index(): View
     {
-        $notes=Note::all();
+        $notes = Note::with(['etudiant', 'elementConstitutif'])->get();
         return view('notes.index', compact('notes'));
     }
 
@@ -32,38 +32,40 @@ class NoteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): View
+    public function store(Request $request): RedirectResponse
     {
-        //dd($request->all());
         $validatedData = $request->validate([
 
             'etudiant_id' => 'required|exists:etudiants,id',
              'ec_id' => 'required|exists:elements_constitutifs,id',
              'note'=> 'required|numeric|min:0|max:20',
-             'session' =>'required|string|max:3',
-             'date_evaluation'=>'required|decimal',
+             'session' =>'required|string',
+             'date_evaluation'=>'required|date',
            ]);
-          //   dd($validated);
+       //    $moyenneUE = $this->calculerMoyenneUE($validatedData['notes']);
+           //dd($validatedData);
            Note::create($validatedData);
            return redirect()->route('notes.index');
-    }
+        }
 
     /**
      * Display the specified resource.
      */
-    public function show(Note $note)
+    public function show( $id)
     {
-     //   $note=Note::find($id);
+        $note = Note::with('etudiant')->findOrFail($id);
         return view('notes.show' ,compact('note'));;
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Note $note): View
+    public function edit( $id): View
     {
-        //$note=Note::find($id);
-        return view('notes.edit' ,compact('note'));;
+        $etudiants = Etudiant::all();
+        $ecs = Elements_constitutif::all();
+        $note = Note::with('etudiant')->findOrFail($id);
+        return view('notes.edit' ,compact('note','etudiants','ecs'));
     }
 
     /**
@@ -76,12 +78,12 @@ class NoteController extends Controller
             'etudiant_id' => 'required|exists:etudiants,id',
              'ec_id' => 'required|exists:elements_constitutifs,id',
              'note'=> 'required|numeric|min:0|max:20',
-             'session' =>'required|string|max:3',
-             'date_evaluation'=>'required|decimal',
+            'session' =>'required|string',
+            'date_evaluation'=>'required|date',
            ]);
           //   dd($validated_request);
            $note->update($validated);
-           $note=Note::find($id);
+          // $note=Note::find($id);
            return redirect()->route('notes.index');
     }
 
@@ -94,4 +96,40 @@ class NoteController extends Controller
         $note->delete();
         return redirect()->route('notes.index');
     }
-}
+
+//     public function calculerMoyenneUE($notes)
+// {
+
+//     $sommeNotesPonderees = 0;
+//     $sommeCoefficients = 0;
+
+//     foreach ($notes as $note) {
+//         $sommeNotesPonderees += $note['note'] * $note['coefficient'];
+//         $sommeCoefficients += $note['coefficient'];
+//     }
+
+//     if ($sommeCoefficients == 0) {
+//         return null;
+//     }
+
+//     $moyenne = $sommeNotesPonderees / $sommeCoefficients;
+
+//     return round($moyenne, 2);
+// }
+
+
+
+
+// public function showMoyenne($etudiantId, $ueId)
+//     {
+//     $moyenne = $this->calculerMoyenne($etudiantId, $ueId);
+
+//     $isValidated = $moyenne >= 10;
+
+//     return view('notes.show', [
+//         'moyenne' => $moyenne,
+//         'is_validated' => $isValidated,
+//     ]);
+//     }
+
+ }

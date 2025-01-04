@@ -23,7 +23,7 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('note')" :active="request()->routeIs('note')">
+                    <x-nav-link :href="route('notes.index')" :active="request()->routeIs('notes.index')">
                         {{ __('Note') }}
                     </x-nav-link>
                 </div>
@@ -87,7 +87,7 @@
             <x-responsive-nav-link :href="route('elements_constitutifs.index')" :active="request()->routeIs('elements_constitutifs.index')">
                 {{ __('EC') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('note')" :active="request()->routeIs('note')" wire:navigate>
+            <x-responsive-nav-link :href="route('notes.index')" :active="request()->routeIs('notes.index')" wire:navigate>
                 {{ __('Note') }}
             </x-responsive-nav-link>
         </div>

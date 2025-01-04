@@ -1,3 +1,5 @@
+<div class="container mx-auto max-w-lg p-6 bg-white shadow-md rounded-md">
+    <h1 class="text-2xl font-bold mb-6 text-center">Ajouter une note</h1>
 <form action="{{ route('etudiants.store') }}" method="post">
     @csrf
     <div class="form-group">
@@ -15,10 +17,11 @@
     <div class="form-group">
         <label for="niveau">Niveau</label>
         <select type="text" class="form-control form-control-sm" id="niveau" name="niveau" required>
-        <option value="L1" >L1</option>
-        <option value="L2" >L2</option>
-        <option value="L3" >L3</option>
+        <option value="L1" >Licence 1</option>
+        <option value="L2" >Licence 2</option>
+        <option value="L3" >Licence 3</option>
     </select>
     </div>
     <button type="submit" class="btn btn-primary">Envoyer</button>
 </form>
+</div>

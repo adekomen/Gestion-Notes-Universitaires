@@ -64,15 +64,15 @@ class EtudiantController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Etudiant $etudiant)
+    public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'numero_etudiant' => 'required|string|unique:etudiants,numero_etudiant',
+           // 'numero_etudiant' => 'required|string|unique:etudiants,numero_etudiant',
             'nom' => 'required|max:255',
             'prenom' => 'required|max:255',
             'niveau' => 'required|string|in:L1,L2,L3',
         ]);
-        $etudiant = Etudiant::find($etudiant);
+        $etudiant = Etudiant::findOrFail($id);
         $etudiant->update($validatedData);
         return redirect()->route('etudiants.index');
 

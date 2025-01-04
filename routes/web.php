@@ -3,6 +3,8 @@
 use App\Http\Controllers\ElementsConstitutifController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UnitesEnseignementController;
+use App\Http\Controllers\NoteController;
+use App\Http\Controllers\EtudiantController;
 
 
 use App\Http\Controllers\DashboardController;
@@ -31,23 +33,15 @@ Route::resource('elements_constitutifs', ElementsConstitutifController::class)
     ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
     ->middleware(['auth', 'verified']);
 
-Route::get('/note', [NoteController::class, 'index'])->name('note');
-Route::get('/note/create', [NoteController::class, 'create'])->name('notes.create');
-Route::get('/notes/{note}edit', [NoteController::class, 'edit'])->name('notes.edit');
-Route::put('/notes/{note}', [EtudiantController::class, 'update'])->name('notes.update');
-Route::get('/notes/show', [NoteController::class, 'show'])->name('notes.show');
-Route::post('/notes/store', [NoteController::class, 'store'])->name('notes.store');
-Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
+Route::resource('notes', NoteController::class)
+    ->only(['index', 'create', 'store', 'edit', 'update','show', 'destroy'])
+    ->middleware(['auth', 'verified']);
+// Route::get('/notes/moyenne/{etudiantId}/{ueId}', [NoteController::class, 'showMoyenne'])->name('notes.moyenne');
 
+Route::resource('etudiants', EtudiantController::class)
+    ->only(['index', 'create', 'store', 'edit', 'update', 'show','destroy'])
+    ->middleware(['auth', 'verified']);
 
-
-Route::get('/etudiants', [EtudiantController::class, 'index'])->name('etudiants.index');
-Route::get('/etudiants/create', [EtudiantController::class, 'create'])->name('etudiants.create');
-Route::get('/etudiants/{etudiant}/edit', [EtudiantController::class, 'edit'])->name('etudiants.edit');
-Route::put('/etudiants/{etudiant}', [EtudiantController::class, 'update'])->name('etudiants.update');
-Route::get('/etudiants/{etudiant}', [EtudiantController::class, 'show'])->name('etudiants.show');
-Route::post('/etudiants', [EtudiantController::class, 'store'])->name('etudiants.store');
-Route::delete('/etudiants/{etudiant}', [EtudiantController::class, 'destroy'])->name('etudiants.destroy');
 
 require __DIR__.'/auth.php';
 

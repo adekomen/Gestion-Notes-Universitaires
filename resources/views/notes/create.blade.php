@@ -1,19 +1,29 @@
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <div class="container mx-auto max-w-lg p-6 bg-white shadow-md rounded-md">
     <h1 class="text-2xl font-bold mb-6 text-center">Ajouter une note</h1>
     <form action="{{ route('notes.store') }}" method="POST" class="space-y-4">
         @csrf
         <div class="form-group">
-            <label for="etudiant" class="block text-sm font-medium text-gray-700 mb-2">Étudiant</label>
-            <select name="etudiant_id" id="etudiant" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            <label for="etudiant_id" class="block text-sm font-medium text-gray-700 mb-2">Étudiant</label>
+            <select name="etudiant_id" id="etudiant_id" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                 @foreach($etudiants as $etudiant)
-                <option value="{{ $etudiant->id }}">{{ $etudiant->id }} - {{ $etudiant->name }}</option>
+                <option value="{{ $etudiant->id }}">{{ $etudiant->id }} - {{ $etudiant->nom }}</option>
                 @endforeach
             </select>
         </div>
 
         <div class="form-group">
-            <label for="ec" class="block text-sm font-medium text-gray-700 mb-2">Élément Constitutif</label>
-            <select name="ec_id" id="ec" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            <label for="ec_id" class="block text-sm font-medium text-gray-700 mb-2">Élément Constitutif</label>
+            <select name="ec_id" id="ec_id" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                 @foreach($ecs as $ec)
                     <option value="{{ $ec->id }}">{{ $ec->code }} - {{ $ec->nom }}</option>
                 @endforeach
@@ -21,13 +31,13 @@
         </div>
 
         <div class="form-group">
-            <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">Matière</label>
-            <input type="text" name="matière" id="subject" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
+            <label for="date_evaluation" class="block text-sm font-medium text-gray-700 mb-2">Date de l'évaluation</label>
+            <input type="date" name="date_evaluation" id="date_evaluation" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
         </div>
 
         <div class="form-group">
-            <label for="grade" class="block text-sm font-medium text-gray-700 mb-2">Note</label>
-            <input type="number" name="note" id="grade" min="0" max="20" step="0.25" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
+            <label for="note" class="block text-sm font-medium text-gray-700 mb-2">Note</label>
+            <input type="number" name="note" id="note" min="0" max="20" step="0.25" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
         </div>
 
         <div class="form-group">
