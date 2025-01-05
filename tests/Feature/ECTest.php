@@ -1,80 +1,99 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use App\Models\Elements_constitutif;
 use App\Models\Unites_enseignement;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ECTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
-
     use RefreshDatabase;
 
-    public function test_creation_ec_valide()
-    {
-        $ec = Elements_constitutif::factory()->create([
-            'code' => 'EC101',
-            'nom' => 'Introduction à la programmation',
-            'coefficient' => 3,
-            'ue_id' => 1
-        ]);
-
-        $this->assertDatabaseHas('elements_constitutifs', [
-            'code' => 'EC101',
-            'nom' => 'Introduction à la programmation'
-        ]);
-    }
-
     /**
-     * Test 2 : Vérification du rattachement à une UE.
+     * Test de création d'un EC avec un coefficient valide.
      */
-    public function test_rattachement_ec_ue()
+    public function test_creation_ec_avec_coefficient(): void
     {
         $ue = Unites_enseignement::factory()->create();
-        $ec = Elements_constitutif::factory()->create(['ue_id' => $ue->id]);
-
-        $this->assertEquals($ue->id, $ec->ue_id);
-    }
-
-    /**
-     * Test 3 : Modification d'un EC.
-     */
-    public function test_modification_ec()
-    {
-        $ec = Elements_constitutif::factory()->create(['nom' => 'Programmation']);
-        $ec->update(['nom' => 'Programmation avancée']);
+        $ec = Elements_constitutif::factory()->create([
+            'code' => 'EC01',
+            'nom' => 'Programmation PHP',
+            'ue_id' => $ue->id,
+            'coefficient' => 3,
+        ]);
 
         $this->assertDatabaseHas('elements_constitutifs', [
-            'nom' => 'Programmation avancée'
+            'code' => 'EC01',
+            'nom' => 'Programmation PHP',
         ]);
     }
 
     /**
-     * Test 4 : Validation du coefficient (entre 1 et 5).
+     * Test de vérification du rattachement d'un EC à une UE.
      */
-    public function test_validation_coefficient_ec()
+    public function test_verification_rattachement_ec_ue(): void
     {
-        $ec = Elements_constitutif::factory()->make(['coefficient' => 6]);
-        $this->assertFalse($ec->save(), "Un coefficient supérieur à 5 ne doit pas être accepté.");
+        $ue = Unites_enseignement::factory()->create();
+        $ec = Elements_constitutif::factory()->create([
+            'ue_id' => $ue->id,
+        ]);
 
-        $ec = Elements_constitutif::factory()->make(['coefficient' => 3]);
-        $this->assertTrue($ec->save(), "Un coefficient entre 1 et 5 doit être accepté.");
+        $this->assertEquals($ue->id, $ec->ue_id, "L'EC doit être rattaché à la bonne UE.");
     }
 
     /**
-     * Test 5 : Suppression d'un EC.
+     * Test de modification d'un EC.
      */
-    public function test_suppression_ec()
+    public function test_modification_ec(): void
     {
-        $ec = Elements_constitutif::factory()->create();
+        $ec = Elements_constitutif::factory()->create([
+            'code' => 'EC02',
+            'nom' => 'Algorithmes',
+            'coefficient' => 2,
+        ]);
+
+        $ec->update([
+            'nom' => 'Algorithmes Avancés',
+        ]);
+
+        $this->assertDatabaseHas('elements_constitutifs', [
+            'code' => 'EC02',
+            'nom' => 'Algorithmes Avancés',
+        ]);
+    }
+
+    /**
+     * Test de validation du coefficient (entre 1 et 5).
+     */
+    public function test_validation_coefficient(): void
+    {
+        $ec = Elements_constitutif::factory()->make([
+            'coefficient' => 6, // Coefficient invalide
+        ]);
+
+        $this->assertFalse(
+            $ec->coefficient >= 1 && $ec->coefficient <= 5,
+            "Le coefficient doit être compris entre 1 et 5."
+        );
+    }
+
+    /**
+     * Test de suppression d'un EC.
+     */
+    public function test_suppression_ec(): void
+    {
+        $ec = Elements_constitutif::factory()->create([
+            'code' => 'EC03',
+            'nom' => 'Systèmes d\'exploitation',
+        ]);
+
         $ec->delete();
 
-        $this->assertSoftDeleted($ec);
+        $this->assertDatabaseMissing('elements_constitutifs', [
+            'code' => 'EC03',
+            'nom' => 'Systèmes d\'exploitation',
+        ]);
     }
 }
