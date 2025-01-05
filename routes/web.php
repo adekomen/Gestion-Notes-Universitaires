@@ -3,15 +3,22 @@
 use App\Http\Controllers\ElementsConstitutifController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UnitesEnseignementController;
+use App\Http\Controllers\NoteController;
+use App\Http\Controllers\EtudiantController; 
+
 
 
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
-
+use Inertia\Inertia;
 
 Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('Home');
 });
+
+
+
+
 
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])

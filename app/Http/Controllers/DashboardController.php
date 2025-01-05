@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Elements_constitutif;
 use App\Models\Unites_enseignement;
+use Inertia\Inertia;
 
 use Illuminate\Http\Request;
 
@@ -14,6 +15,6 @@ class DashboardController extends Controller
         $totalEC = Elements_Constitutif::count();
         $ueWithEcCount = Unites_Enseignement::withCount('elementsConstitutifs')->get();
 
-        return view('dashboard', compact('totalUE', 'totalEC', 'ueWithEcCount'));
+        return Inertia::render('Dashboard', compact('totalUE', 'totalEC', 'ueWithEcCount'));
     }
 }

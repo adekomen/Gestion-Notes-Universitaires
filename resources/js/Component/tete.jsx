@@ -10,8 +10,8 @@ export default function NavBar() {
                 
                 <div  style={{display:'flex',gap:'30px', justifyContent:'center', fontSize:'15px',fontFamily:'impact,Times New Roman,Comic Sans MS,Courier New',marginTop:'px' }}>
                 <Link href="" style={{ textDecoration:'none',color:'white'}}><i class='bx bx-home-alt-2'></i>Home</Link>
-                <Link href="/about" style={{ textDecoration:'none',color:'white'}}><i class='bx bx-user'> </i>Login </Link>
-                <Link href="/contact" style={{ textDecoration:'none',color:'white'}}><i class='bx bxs-user-account'></i>Sign Up</Link>
+                <Link href="/login" style={{ textDecoration:'none',color:'white'}}><i class='bx bx-user'> </i>Login </Link>
+                <Link href="/signup" style={{ textDecoration:'none',color:'white'}}><i class='bx bxs-user-account'></i>Sign Up</Link>
                 
                 </div>
                 

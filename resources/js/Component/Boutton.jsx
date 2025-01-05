@@ -5,11 +5,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 
+
 export default function NavBar() {
     return (
     <div style={{display:'flex', gap:'30px',marginTop:'50px',animation: 'slideIn 4s ease-out'}}>
-    <Link href="" className="btn btn-primary" tabindex="-1" role="button" aria-disabled="false" style={{fontFamily:'Comic Sans MS,impact,Times New Roman,Courier New'}}>Sign Up</Link>
-    <Link href="" className="btn btn-secondary" tabindex="-1" role="button" aria-disabled="true" style={{fontFamily:'Comic Sans MS,impact,Times New Roman,Courier New'}}>Login</Link>
+    <Link href="/signup" className="btn btn-primary" tabindex="-1" role="button" aria-disabled="false" style={{fontFamily:'Comic Sans MS,impact,Times New Roman,Courier New'}}>Sign Up</Link>
+    <Link href="/login" className="btn btn-secondary" tabindex="-1" role="button" aria-disabled="true" style={{fontFamily:'Comic Sans MS,impact,Times New Roman,Courier New'}}>Login</Link>
     <style>
                 {`
                 @keyframes slideIn {
