@@ -21,7 +21,7 @@
             </select>
         </div>
 
-        <div class="form-group">
+         <div class="form-group">
             <label for="ec_id" class="block text-sm font-medium text-gray-700 mb-2">Élément Constitutif</label>
             <select name="ec_id" id="ec_id" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                 @foreach($ecs as $ec)
@@ -35,7 +35,7 @@
             <input type="date" name="date_evaluation" id="date_evaluation" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
         </div>
 
-        <div class="form-group">
+         <div class="form-group">
             <label for="note" class="block text-sm font-medium text-gray-700 mb-2">Note</label>
             <input type="number" name="note" id="note" min="0" max="20" step="0.25" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
         </div>

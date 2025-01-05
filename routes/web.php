@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('dashboard');
 });
 
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])
@@ -36,7 +36,7 @@ Route::resource('elements_constitutifs', ElementsConstitutifController::class)
 Route::resource('notes', NoteController::class)
     ->only(['index', 'create', 'store', 'edit', 'update','show', 'destroy'])
     ->middleware(['auth', 'verified']);
-// Route::get('/notes/moyenne/{etudiantId}/{ueId}', [NoteController::class, 'showMoyenne'])->name('notes.moyenne');
+ Route::get('/notes/moyenne/{etudiantId}/{ueId}', [NoteController::class, 'showMoyenne'])->name('notes.showMoyenne');
 
 Route::resource('etudiants', EtudiantController::class)
     ->only(['index', 'create', 'store', 'edit', 'update', 'show','destroy'])

@@ -92,44 +92,46 @@ class NoteController extends Controller
      */
     public function destroy(Note $note): RedirectResponse
     {
-      //  $note=Note::find($id);
         $note->delete();
         return redirect()->route('notes.index');
     }
 
-//     public function calculerMoyenneUE($notes)
-// {
+    public function calculerMoyenneUE($notes)
+    {
+    $sommeNotesPonderees = 0;
+    $sommeCoefficients = 0;
 
-//     $sommeNotesPonderees = 0;
-//     $sommeCoefficients = 0;
+    foreach ($notes as $note) {
+        $sommeNotesPonderees += $note->note * $note->coefficient;
+        $sommeCoefficients += $note->coefficient;
+    }
 
-//     foreach ($notes as $note) {
-//         $sommeNotesPonderees += $note['note'] * $note['coefficient'];
-//         $sommeCoefficients += $note['coefficient'];
-//     }
+    if ($sommeCoefficients == 0) {
+        return null;
+    }
 
-//     if ($sommeCoefficients == 0) {
-//         return null;
-//     }
+    $moyenne = $sommeNotesPonderees / $sommeCoefficients;
 
-//     $moyenne = $sommeNotesPonderees / $sommeCoefficients;
+    return round($moyenne, 2);
+    }
 
-//     return round($moyenne, 2);
-// }
+    public function showMoyenne($etudiantId, $ueId)
+    {
+    // Récupérer les notes de l'étudiant pour cette UE
+    $notes = Note::where('etudiant_id', $etudiantId)->get()
+        ->where('ue_id', $ueId)
+        ->get();
 
+    // Calculer la moyenne
+    $moyenne = $this->calculerMoyenneUE($notes);
 
+    // Validation de l'UE (≥ 10/20)
+    $isValidated = $moyenne >= 10;
 
-
-// public function showMoyenne($etudiantId, $ueId)
-//     {
-//     $moyenne = $this->calculerMoyenne($etudiantId, $ueId);
-
-//     $isValidated = $moyenne >= 10;
-
-//     return view('notes.show', [
-//         'moyenne' => $moyenne,
-//         'is_validated' => $isValidated,
-//     ]);
-//     }
-
- }
+    return view('notes.show', [
+        'notes' => $notes,
+        'moyenne' => $moyenne,
+        'is_validated' => $isValidated,
+    ]);
+}
+}
