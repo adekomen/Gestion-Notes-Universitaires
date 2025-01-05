@@ -17,13 +17,6 @@ class NotesTest extends TestCase
     public function test_ajout_note_valide()
 {
     $note = Note::factory()->create();
-    // $ec = EC::factory()->create();
-
-    // $note = Note::create([
-    //     'etudiant_id' => $etudiant->id,
-    //     'ec_id' => $ec->id,
-    //     'note' => 15, // Note valide
-    // ]);
 
     $this->assertDatabaseHas('notes', [
         'etudiant_id' => $note->etudiant_id,
@@ -66,9 +59,8 @@ class NotesTest extends TestCase
             'session' => 'normale',
             'date_evaluation' => now(),
         ]);
-
-
         //$response->assertSessionHasErrors(['note' => 'La note doit être comprise entre 0 et 20.']);
+
 
     //     public function calculer_Moyenne_ue($etudiant, $ue)
     // {
@@ -100,58 +92,57 @@ class NotesTest extends TestCase
     // }
 
 }
-// public function test_calculer_moyenne_ue()
-//     {
-//         // Créer un étudiant
-//         $etudiant = Etudiant::factory()->create();
+public function test_calculer_moyenne_ue()
+    {
+        $etudiant = Etudiant::factory()->create();
 
-//         // Créer une UE
-//     //    $ue = Unites_enseignement::factory()->create();
-//     $ue = Unites_enseignement::create([
-//         'code' => 'UE01',
-//         'nom' => 'Unité d\'Enseignement 1',
-//         'credits_ects' => 6,
-//         'semestre' => 1,
-//     ]);
-//         $ec = Elements_constitutif::create([
-//             'code' => 'EC05',
-//             'nom' => 'Element Constitutif 1',
-//             'coefficient' => 2,
-//         ]);
-//         // Créer des notes pour cet étudiant dans l'UE
-//         $note1 = Note::create([
-//             'etudiant_id' => $etudiant->id,
-//             'ue_id' => $ue->id,
-//             'ec_id' => $ec->id,  // Ajoute l'ID du EC si nécessaire
-//             'note' => 12,
-//             'coefficient' => 2,
-//         ]);
-//         $note2 = Note::create([
-//             'etudiant_id' => $etudiant->id,
-//             'ue_id' => $ue->id,
-//             'ec_id' => $ec->id,  // Ajoute l'ID du EC si nécessaire
-//             'note' => 16,
-//             'coefficient' => 3,
-//         ]);
+        // Créer une UE
+    //    $ue = Unites_enseignement::factory()->create();
+    $ue = Unites_enseignement::create([
+        'code' => 'UE09',
+        'nom' => 'Unité d\'Enseignement 1',
+        'credits_ects' => 6,
+        'semestre' => 1,
+    ]);
+        $ec = Elements_constitutif::create([
+            'code' => 'EC05',
+            'nom' => 'Element Constitutif 1',
+            'coefficient' => 2,
+        ]);
+        // Créer des notes pour cet étudiant dans l'UE
+        $note1 = Note::create([
+            'etudiant_id' => $etudiant->id,
+            'ue_id' => $ue->id,
+            'ec_id' => $ec->id,  // Ajoute l'ID du EC si nécessaire
+            'note' => 12,
+            'coefficient' => 2,
+        ]);
+        $note2 = Note::create([
+            'etudiant_id' => $etudiant->id,
+            'ue_id' => $ue->id,
+            'ec_id' => $ec->id,  // Ajoute l'ID du EC si nécessaire
+            'note' => 16,
+            'coefficient' => 3,
+        ]);
 
-//         // Appeler la méthode showMoyenne pour récupérer les notes et calculer la moyenne
-//         $response = $this->get(route('notes.show', [
-//             'etudiantId' => $etudiant->id,
-//             'ueId' => $ue->id,
-//         ]));
+        // Appeler la méthode showMoyenne pour récupérer les notes et calculer la moyenne
+        $response = $this->get(route('notes.show', [
+            'etudiantId' => $etudiant->id,
+            'ueId' => $ue->id,
+        ]));
 
-//         // Vérifier que la réponse est correcte (status OK)
-//         $response->assertStatus(200);
+        // Vérifier que la réponse est correcte (status OK)
+        $response->assertStatus(200);
 
-//         // Vérifier que la vue contient les données nécessaires
-//         $response->assertViewHas('notes', [$note1, $note2]); // Vérifier que les notes sont passées à la vue
-//         $response->assertViewHas('moyenne'); // Vérifier que la moyenne est passée à la vue
-//         $response->assertViewHas('is_validated'); // Vérifier que la validation est passée à la vue
+        // Vérifier que la vue contient les données nécessaires
+        $response->assertViewHas('notes', [$note1, $note2]); // Vérifier que les notes sont passées à la vue
+        $response->assertViewHas('moyenne'); // Vérifier que la moyenne est passée à la vue
+        $response->assertViewHas('is_validated'); // Vérifier que la validation est passée à la vue
 
-//         // Vérifier que la moyenne calculée est correcte
-//         $moyenneAttendue = (12 * 2 + 16 * 3) / (2 + 3); // Moyenne pondérée : (12*2 + 16*3) / (2+3)
-//         $response->assertSee(round($moyenneAttendue, 2)); // Vérifier que la moyenne attendue est affichée
-//     }
+        // Vérifier que la moyenne calculée est correcte
+        $moyenneAttendue = (12 * 2 + 16 * 3) / (2 + 3); // Moyenne pondérée : (12*2 + 16*3) / (2+3)
+        $response->assertSee(round($moyenneAttendue, 2)); // Vérifier que la moyenne attendue est affichée
+    }
 
 
 
@@ -247,144 +238,144 @@ private function gererNotesManquantes($etudiant, $ecs)
 }
 
 
-// public function test_validation_ue()
-// {
-//     // Créez un étudiant
-//     $etudiant = Etudiant::factory()->create();
+public function test_validation_ue()
+{
+    // Créez un étudiant
+    $etudiant = Etudiant::factory()->create();
 
-//     // Créez une UE
-//     $ue = Unites_enseignement::factory()->create();
+    // Créez une UE
+    $ue = Unites_enseignement::factory()->create();
 
-//     // Créez deux ECs associés à l'UE
-//     $ec5 = Elements_constitutif::factory()->create(['ue_id' => $ue->id, 'coefficient' => 2]);
-//     $ec6 = Elements_constitutif::factory()->create(['ue_id' => $ue->id, 'coefficient' => 3]);
+    // Créez deux ECs associés à l'UE
+    $ec5 = Elements_constitutif::factory()->create(['ue_id' => $ue->id, 'coefficient' => 2]);
+    $ec6 = Elements_constitutif::factory()->create(['ue_id' => $ue->id, 'coefficient' => 3]);
 
-//     // Ajoutez des notes pour les ECs
-//     Note::create([
-//         'etudiant_id' => $etudiant->id,
-//         'ec_id' => $ec5->id,
-//         'note' => 15,
-//         'session' => 'normale',
-//         'date_evaluation' => now(),
-//     ]);
+    // Ajoutez des notes pour les ECs
+    Note::create([
+        'etudiant_id' => $etudiant->id,
+        'ec_id' => $ec5->id,
+        'note' => 15,
+        'session' => 'normale',
+        'date_evaluation' => now(),
+    ]);
 
-//     Note::create([
-//         'etudiant_id' => $etudiant->id,
-//         'ec_id' => $ec6->id,
-//         'note' => 19,
-//         'session' => 'normale',
-//         'date_evaluation' => now(),
-//     ]);
+    Note::create([
+        'etudiant_id' => $etudiant->id,
+        'ec_id' => $ec6->id,
+        'note' => 19,
+        'session' => 'normale',
+        'date_evaluation' => now(),
+    ]);
 
-//     // Calculez la moyenne de l'UE
-//     $moyenneUE = $this->calculerMoyenneUE($etudiant, $ue);
+    // Calculez la moyenne de l'UE
+    $moyenneUE = $this->calculerMoyenneUE($etudiant, $ue);
 
-//     // Vérifiez que la moyenne de l'UE est calculée correctement
-//    // $this->assertEquals(9.2, $moyenneUE);
+    // Vérifiez que la moyenne de l'UE est calculée correctement
+   // $this->assertEquals(9.2, $moyenneUE);
 
-//     // Vérifiez que l'UE est validée (si moyenne >= 10)
-//     $isValidee = $moyenneUE >= 10;
-//     $this->assertFalse($isValidee); // UE non validée car moyenne < 10
+    // Vérifiez que l'UE est validée (si moyenne >= 10)
+    $isValidee = $moyenneUE >= 10;
+    $this->assertFalse($isValidee); // UE non validée car moyenne < 10
 
-//     // Ajoutez une nouvelle note pour compenser et valider l'UE
-//     // Note::create([
-//     //     'etudiant_id' => $etudiant->id,
-//     //     'ec_id' => $ec6->id,
-//     //     'note' => 18,
-//     //     'session' => 'rattrapage',
-//     //     'date_evaluation' => now(),
-//     // ]);
+    // Ajoutez une nouvelle note pour compenser et valider l'UE
+    // Note::create([
+    //     'etudiant_id' => $etudiant->id,
+    //     'ec_id' => $ec6->id,
+    //     'note' => 18,
+    //     'session' => 'rattrapage',
+    //     'date_evaluation' => now(),
+    // ]);
 
-//     // Recalculez la moyenne de l'UE
-//     $moyenneUE = $this->calculerMoyenneUE($etudiant, $ue);
+    // Recalculez la moyenne de l'UE
+    $moyenneUE = $this->calculerMoyenneUE($etudiant, $ue);
 
-//     // Vérifiez que l'UE est maintenant validée
-//     $this->assertTrue($moyenneUE >= 10, "L'UE n'est pas validée alors qu'elle devrait l'être.");
-// }
+    // Vérifiez que l'UE est maintenant validée
+    $this->assertTrue($moyenneUE >= 10, "L'UE n'est pas validée alors qu'elle devrait l'être.");
+}
 
-// /**
-//  * Calculer la moyenne pondérée d'une UE pour un étudiant.
-//  */
-// private function calculerMoyenneUE($etudiant, $ue)
-// {
-//     $ecs = Elements_constitutif::where('ue_id', $ue->id)->get();
-//     $totalCoef = 0;
-//     $sommeNotesPonderees = 0;
+/**
+ * Calculer la moyenne pondérée d'une UE pour un étudiant.
+ */
+private function calculerMoyenneUE($etudiant, $ue)
+{
+    $ecs = Elements_constitutif::where('ue_id', $ue->id)->get();
+    $totalCoef = 0;
+    $sommeNotesPonderees = 0;
 
-//     foreach ($ecs as $ec) {
-//         $note = Note::where('etudiant_id', $etudiant->id)
-//                     ->where('ec_id', $ec->id)
-//                     ->orderBy('session', 'desc') // Prioriser la session de rattrapage si elle existe
-//                     ->first();
+    foreach ($ecs as $ec) {
+        $note = Note::where('etudiant_id', $etudiant->id)
+                    ->where('ec_id', $ec->id)
+                    ->orderBy('session', 'desc') // Prioriser la session de rattrapage si elle existe
+                    ->first();
 
-//         if ($note) {
-//             $sommeNotesPonderees += $note->note * $ec->coef;
-//             $totalCoef += $ec->coef;
-//         }
-//     }
+        if ($note) {
+            $sommeNotesPonderees += $note->note * $ec->coef;
+            $totalCoef += $ec->coef;
+        }
+    }
 
-//     return $totalCoef > 0 ? $sommeNotesPonderees / $totalCoef : 0;
-// }
+    return $totalCoef > 0 ? $sommeNotesPonderees / $totalCoef : 0;
+}
 
 
-// public function test_compensation_entre_ues()
-// {
-//     // Créez un étudiant
-//     $etudiant = Etudiant::factory()->create();
+public function test_compensation_entre_ues()
+{
+    // Créez un étudiant
+    $etudiant = Etudiant::factory()->create();
 
-//     // Créez deux UEs dans le même semestre
-//     $ue1 = Unites_enseignement::factory()->create(['semestre' => 1, 'credits_ects' => 6]);
-//     $ue2 = Unites_enseignement::factory()->create(['semestre' => 1, 'credits_ects' => 4]);
+    // Créez deux UEs dans le même semestre
+    $ue1 = Unites_enseignement::factory()->create(['semestre' => 1, 'credits_ects' => 6]);
+    $ue2 = Unites_enseignement::factory()->create(['semestre' => 1, 'credits_ects' => 4]);
 
-//     // Créez des ECs associés aux UEs
-//     $ec1_1 = Elements_constitutif::factory()->create(['ue_id' => $ue1->id, 'coefficient' => 1]);
-//     $ec1_2 = Elements_constitutif::factory()->create(['ue_id' => $ue1->id, 'coefficient' => 2]);
-//     $ec2_1 = Elements_constitutif::factory()->create(['ue_id' => $ue2->id, 'coefficient' => 1]);
+    // Créez des ECs associés aux UEs
+    $ec1_1 = Elements_constitutif::factory()->create(['ue_id' => $ue1->id, 'coefficient' => 1]);
+    $ec1_2 = Elements_constitutif::factory()->create(['ue_id' => $ue1->id, 'coefficient' => 2]);
+    $ec2_1 = Elements_constitutif::factory()->create(['ue_id' => $ue2->id, 'coefficient' => 1]);
 
-//     // Ajoutez des notes pour les ECs
-//     Note::create([
-//         'etudiant_id' => $etudiant->id,
-//         'ec_id' => $ec1_1->id,
-//         'note' => 9,
-//         'session' => 'normale',
-//         'date_evaluation' => now(),
-//     ]);
+    // Ajoutez des notes pour les ECs
+    Note::create([
+        'etudiant_id' => $etudiant->id,
+        'ec_id' => $ec1_1->id,
+        'note' => 9,
+        'session' => 'normale',
+        'date_evaluation' => now(),
+    ]);
 
-//     Note::create([
-//         'etudiant_id' => $etudiant->id,
-//         'ec_id' => $ec1_2->id,
-//         'note' => 8,
-//         'session' => 'normale',
-//         'date_evaluation' => now(),
-//     ]);
+    Note::create([
+        'etudiant_id' => $etudiant->id,
+        'ec_id' => $ec1_2->id,
+        'note' => 8,
+        'session' => 'normale',
+        'date_evaluation' => now(),
+    ]);
 
-//     Note::create([
-//         'etudiant_id' => $etudiant->id,
-//         'ec_id' => $ec2_1->id,
-//         'note' => 12,
-//         'session' => 'normale',
-//         'date_evaluation' => now(),
-//     ]);
+    Note::create([
+        'etudiant_id' => $etudiant->id,
+        'ec_id' => $ec2_1->id,
+        'note' => 12,
+        'session' => 'normale',
+        'date_evaluation' => now(),
+    ]);
 
-//     // Calculez la moyenne des UEs
-//     $moyenneUE1 = $this->calculerMoyenneUE($etudiant, $ue1); // Moyenne attendue : 8.33
-//     $moyenneUE2 = $this->calculerMoyenneUE($etudiant, $ue2); // Moyenne attendue : 12
+    // Calculez la moyenne des UEs
+    $moyenneUE1 = $this->calculerMoyenneUE($etudiant, $ue1); // Moyenne attendue : 8.33
+    $moyenneUE2 = $this->calculerMoyenneUE($etudiant, $ue2); // Moyenne attendue : 12
 
-//     // Vérifiez les moyennes
-//     $this->assertEquals(8.33, round($moyenneUE1, 2), "La moyenne de l'UE1 est incorrecte.");
-//     $this->assertEquals(12, round($moyenneUE2, 2), "La moyenne de l'UE2 est incorrecte.");
+    // Vérifiez les moyennes
+    $this->assertEquals(8.33, round($moyenneUE1, 2), "La moyenne de l'UE1 est incorrecte.");
+    $this->assertEquals(12, round($moyenneUE2, 2), "La moyenne de l'UE2 est incorrecte.");
 
-//     // Calculez la moyenne pondérée du semestre
-//     $moyennePonderee = $this->calculerMoyennePondereeSemestre($etudiant, 1);
+    // Calculez la moyenne pondérée du semestre
+    $moyennePonderee = $this->calculerMoyennePondereeSemestre($etudiant, 1);
 
-//     // Vérifiez la moyenne pondérée
-//     $this->assertEquals(9.8, round($moyennePonderee, 1), "La moyenne pondérée du semestre est incorrecte.");
+    // Vérifiez la moyenne pondérée
+    $this->assertEquals(9.8, round($moyennePonderee, 1), "La moyenne pondérée du semestre est incorrecte.");
 
-//     // Vérifiez si le semestre est compensé
-//     $semestreValide = $this->verifierCompensationSemestre($etudiant, 1);
+    // Vérifiez si le semestre est compensé
+    $semestreValide = $this->verifierCompensationSemestre($etudiant, 1);
 
-//     $this->assertTrue($semestreValide, "Le semestre n'est pas validé alors qu'il devrait l'être.");
-// }
+    $this->assertTrue($semestreValide, "Le semestre n'est pas validé alors qu'il devrait l'être.");
+}
 
 
 

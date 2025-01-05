@@ -23,7 +23,7 @@ class NoteController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create($ueId): View
+    public function create(): View
     {
         $ue = Unites_enseignement::findOrFail($ueId);
         $etudiants=Etudiant::all();
@@ -154,6 +154,7 @@ class NoteController extends Controller
         $isValidated = $moyenne >= 10;
 
         return view('notes.show', [
+            'ue_id'=>1,
             'moyenne' => $moyenne,
             'is_validated' => $isValidated,
         ]);
