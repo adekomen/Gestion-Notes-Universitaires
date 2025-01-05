@@ -203,7 +203,52 @@ private function test_obtenir_Meilleure_Note($etudiant, $ec)
     return $notes->max('note');
 }
 
+public function test_validation_notes_manquantes()
+{
+     // Créez un étudiant, une UE, et deux ECs
+     $etudiant = Etudiant::factory()->create();
+     $ue = Unites_enseignement::factory()->create();
+     $ec1 = Elements_constitutif::factory()->create(['ue_id' => $ue->id]);
+     $ec2 = Elements_constitutif::factory()->create(['ue_id' => $ue->id]);
 
+     // Ajoutez une note pour le premier EC
+     Note::create([
+         'etudiant_id' => $etudiant->id,
+         'ec_id' => $ec1->id,
+         'note' => 14,
+         'session' => 'normale',
+         'date_evaluation' => now(),
+     ]);
+
+     // Vérifiez la validation des notes manquantes
+     $resultat = $this->gererNotesManquantes($etudiant, [$ec1, $ec2]);
+
+     // Vérifiez que la note pour le deuxième EC est manquante
+     $this->assertTrue($resultat['manque']);
+     $this->assertEquals([$ec2->id], $resultat['details']);
+    }
+/**
+ * Fonction pour vérifier les notes manquantes pour un étudiant dans une liste d'ECs.
+ */
+private function gererNotesManquantes($etudiant, $ecs)
+{
+    $notesManquantes = [];
+
+    foreach ($ecs as $ec) {
+        $note = Note::where('etudiant_id', $etudiant->id)
+                    ->where('ec_id', $ec->id)
+                    ->first();
+
+        if (!$note) {
+            $notesManquantes[] =   $ec->id;
+        }
+    }
+
+    return [
+        'manque' => count($notesManquantes) > 0,
+        'details' => $notesManquantes,
+    ];
+}
 
 
 
