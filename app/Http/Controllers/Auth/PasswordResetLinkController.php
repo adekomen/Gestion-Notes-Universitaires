@@ -7,15 +7,15 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
-
+use Inertia\Inertia;
 class PasswordResetLinkController extends Controller
 {
     /**
      * Display the password reset link request view.
      */
-    public function create(): View
+    public function create()
     {
-        return view('auth.forgot-password');
+        return Inertia::render('Auth/Forgotpassword');
     }
 
     /**
@@ -36,9 +36,10 @@ class PasswordResetLinkController extends Controller
             $request->only('email')
         );
 
-        return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                        ->withErrors(['email' => __($status)]);
+        return response()->json([
+            'status' => $status === Password::RESET_LINK_SENT
+                ? 'A password reset link has been sent to your email.'
+                : 'Failed to send the reset link. Please try again.',
+        ]);
     }
 }

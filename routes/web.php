@@ -9,6 +9,7 @@ use App\Http\Controllers\EtudiantController;
 
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 
 Route::get('/', function () {
