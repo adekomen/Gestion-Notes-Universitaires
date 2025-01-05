@@ -3,6 +3,9 @@
 use App\Http\Controllers\ElementsConstitutifController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UnitesEnseignementController;
+use App\Http\Controllers\NoteController;
+use App\Http\Controllers\EtudiantController;
+use Inertia\Inertia;
 
 
 use App\Http\Controllers\DashboardController;
@@ -10,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('Home');
 });
 
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])
