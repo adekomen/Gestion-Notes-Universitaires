@@ -31,6 +31,6 @@ class Note extends Model
 
     public function ue()
     {
-        return $this->ec->ue();
+        return $this->belongsTo(Unites_enseignement::class, 'ue_id');
     }
 }

@@ -188,10 +188,6 @@ public function test_gestion_sessions_normale_rattrapage()
     // Vérifiez que la meilleure note est celle de la session de rattrapage (12)
     $this->assertEquals(12, $meilleureNote);
 }
-
-/**
- * Fonction pour obtenir la meilleure note d'un étudiant pour un EC.
- */
 private function test_obtenir_Meilleure_Note($etudiant, $ec)
 {
     // Récupérez les notes de l'étudiant pour cet EC
@@ -251,7 +247,144 @@ private function gererNotesManquantes($etudiant, $ecs)
 }
 
 
+// public function test_validation_ue()
+// {
+//     // Créez un étudiant
+//     $etudiant = Etudiant::factory()->create();
 
+//     // Créez une UE
+//     $ue = Unites_enseignement::factory()->create();
+
+//     // Créez deux ECs associés à l'UE
+//     $ec5 = Elements_constitutif::factory()->create(['ue_id' => $ue->id, 'coefficient' => 2]);
+//     $ec6 = Elements_constitutif::factory()->create(['ue_id' => $ue->id, 'coefficient' => 3]);
+
+//     // Ajoutez des notes pour les ECs
+//     Note::create([
+//         'etudiant_id' => $etudiant->id,
+//         'ec_id' => $ec5->id,
+//         'note' => 15,
+//         'session' => 'normale',
+//         'date_evaluation' => now(),
+//     ]);
+
+//     Note::create([
+//         'etudiant_id' => $etudiant->id,
+//         'ec_id' => $ec6->id,
+//         'note' => 19,
+//         'session' => 'normale',
+//         'date_evaluation' => now(),
+//     ]);
+
+//     // Calculez la moyenne de l'UE
+//     $moyenneUE = $this->calculerMoyenneUE($etudiant, $ue);
+
+//     // Vérifiez que la moyenne de l'UE est calculée correctement
+//    // $this->assertEquals(9.2, $moyenneUE);
+
+//     // Vérifiez que l'UE est validée (si moyenne >= 10)
+//     $isValidee = $moyenneUE >= 10;
+//     $this->assertFalse($isValidee); // UE non validée car moyenne < 10
+
+//     // Ajoutez une nouvelle note pour compenser et valider l'UE
+//     // Note::create([
+//     //     'etudiant_id' => $etudiant->id,
+//     //     'ec_id' => $ec6->id,
+//     //     'note' => 18,
+//     //     'session' => 'rattrapage',
+//     //     'date_evaluation' => now(),
+//     // ]);
+
+//     // Recalculez la moyenne de l'UE
+//     $moyenneUE = $this->calculerMoyenneUE($etudiant, $ue);
+
+//     // Vérifiez que l'UE est maintenant validée
+//     $this->assertTrue($moyenneUE >= 10, "L'UE n'est pas validée alors qu'elle devrait l'être.");
+// }
+
+// /**
+//  * Calculer la moyenne pondérée d'une UE pour un étudiant.
+//  */
+// private function calculerMoyenneUE($etudiant, $ue)
+// {
+//     $ecs = Elements_constitutif::where('ue_id', $ue->id)->get();
+//     $totalCoef = 0;
+//     $sommeNotesPonderees = 0;
+
+//     foreach ($ecs as $ec) {
+//         $note = Note::where('etudiant_id', $etudiant->id)
+//                     ->where('ec_id', $ec->id)
+//                     ->orderBy('session', 'desc') // Prioriser la session de rattrapage si elle existe
+//                     ->first();
+
+//         if ($note) {
+//             $sommeNotesPonderees += $note->note * $ec->coef;
+//             $totalCoef += $ec->coef;
+//         }
+//     }
+
+//     return $totalCoef > 0 ? $sommeNotesPonderees / $totalCoef : 0;
+// }
+
+
+// public function test_compensation_entre_ues()
+// {
+//     // Créez un étudiant
+//     $etudiant = Etudiant::factory()->create();
+
+//     // Créez deux UEs dans le même semestre
+//     $ue1 = Unites_enseignement::factory()->create(['semestre' => 1, 'credits_ects' => 6]);
+//     $ue2 = Unites_enseignement::factory()->create(['semestre' => 1, 'credits_ects' => 4]);
+
+//     // Créez des ECs associés aux UEs
+//     $ec1_1 = Elements_constitutif::factory()->create(['ue_id' => $ue1->id, 'coefficient' => 1]);
+//     $ec1_2 = Elements_constitutif::factory()->create(['ue_id' => $ue1->id, 'coefficient' => 2]);
+//     $ec2_1 = Elements_constitutif::factory()->create(['ue_id' => $ue2->id, 'coefficient' => 1]);
+
+//     // Ajoutez des notes pour les ECs
+//     Note::create([
+//         'etudiant_id' => $etudiant->id,
+//         'ec_id' => $ec1_1->id,
+//         'note' => 9,
+//         'session' => 'normale',
+//         'date_evaluation' => now(),
+//     ]);
+
+//     Note::create([
+//         'etudiant_id' => $etudiant->id,
+//         'ec_id' => $ec1_2->id,
+//         'note' => 8,
+//         'session' => 'normale',
+//         'date_evaluation' => now(),
+//     ]);
+
+//     Note::create([
+//         'etudiant_id' => $etudiant->id,
+//         'ec_id' => $ec2_1->id,
+//         'note' => 12,
+//         'session' => 'normale',
+//         'date_evaluation' => now(),
+//     ]);
+
+//     // Calculez la moyenne des UEs
+//     $moyenneUE1 = $this->calculerMoyenneUE($etudiant, $ue1); // Moyenne attendue : 8.33
+//     $moyenneUE2 = $this->calculerMoyenneUE($etudiant, $ue2); // Moyenne attendue : 12
+
+//     // Vérifiez les moyennes
+//     $this->assertEquals(8.33, round($moyenneUE1, 2), "La moyenne de l'UE1 est incorrecte.");
+//     $this->assertEquals(12, round($moyenneUE2, 2), "La moyenne de l'UE2 est incorrecte.");
+
+//     // Calculez la moyenne pondérée du semestre
+//     $moyennePonderee = $this->calculerMoyennePondereeSemestre($etudiant, 1);
+
+//     // Vérifiez la moyenne pondérée
+//     $this->assertEquals(9.8, round($moyennePonderee, 1), "La moyenne pondérée du semestre est incorrecte.");
+
+//     // Vérifiez si le semestre est compensé
+//     $semestreValide = $this->verifierCompensationSemestre($etudiant, 1);
+
+//     $this->assertTrue($semestreValide, "Le semestre n'est pas validé alors qu'il devrait l'être.");
+// }
 
 
 

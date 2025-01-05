@@ -36,7 +36,8 @@ Route::resource('elements_constitutifs', ElementsConstitutifController::class)
 Route::resource('notes', NoteController::class)
     ->only(['index', 'create', 'store', 'edit', 'update','show', 'destroy'])
     ->middleware(['auth', 'verified']);
- Route::get('/notes/moyenne/{etudiantId}/{ueId}', [NoteController::class, 'showMoyenne'])->name('notes.showMoyenne');
+    Route::get('etudiant/{etudiantId}/ue/{ueId}/moyenne', [MoyenneController::class, 'show'])->name('moyennes.show');
+
 
 Route::resource('etudiants', EtudiantController::class)
     ->only(['index', 'create', 'store', 'edit', 'update', 'show','destroy'])

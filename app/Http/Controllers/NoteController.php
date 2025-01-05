@@ -5,6 +5,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use App\Models\Elements_constitutif;
 use App\Models\Etudiant;
+use App\Models\Moyenne;
 use App\Models\Note;
 use Illuminate\Http\Request;
 
@@ -22,11 +23,12 @@ class NoteController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create($ueId): View
     {
+        $ue = Unites_enseignement::findOrFail($ueId);
         $etudiants=Etudiant::all();
         $ecs = Elements_constitutif::all();
-        return view ('notes.create', compact('etudiants','ecs'));
+        return view ('notes.create', compact('etudiants','ecs','ue'));
     }
 
     /**
@@ -41,6 +43,7 @@ class NoteController extends Controller
              'note'=> 'required|numeric|min:0|max:20',
              'session' =>'required|string',
              'date_evaluation'=>'required|date',
+
            ]);
        //    $moyenneUE = $this->calculerMoyenneUE($validatedData['notes']);
            Note::create($validatedData);
@@ -50,11 +53,33 @@ class NoteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show( $id)
+    public function show($ueId)
     {
-        $note = Note::with('etudiant')->findOrFail($id);
-        return view('notes.show' ,compact('note'));;
+        // Récupérer l'UE et ses EC
+        $ue = UE::findOrFail($ueId);
+        $ecs = $ue->ecs;
+
+        // Récupérer les notes pour chaque EC de cette UE
+        $notes = [];
+        foreach ($ecs as $ec) {
+            // Supposons que vous avez une relation entre EC et Note
+            $notes[$ec->id] = $ec->notes->pluck('note'); // Récupérer les notes de l'EC
+        }
+
+        // Calculer la moyenne de l'UE
+        $totalNotes = 0;
+        $totalCount = 0;
+
+        foreach ($notes as $ecNotes) {
+            $totalNotes += $ecNotes->sum();
+            $totalCount += $ecNotes->count();
+        }
+
+        $moyenne = $totalCount > 0 ? $totalNotes / $totalCount : 0;
+
+        return view('notes.show', compact('ue', 'ecs', 'notes', 'moyenne'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -95,42 +120,44 @@ class NoteController extends Controller
         return redirect()->route('notes.index');
     }
 
-    public function calculerMoyenneUE($notes)
+    public function calculerEtSauvegarderMoyenne($etudiantId, $ueId, $notes)
     {
-    $sommeNotesPonderees = 0;
-    $sommeCoefficients = 0;
+        $sommeNotesPonderees = 0;
+        $sommeCoefficients = 0;
 
-    foreach ($notes as $note) {
-        $sommeNotesPonderees += $note->note * $note->coefficient;
-        $sommeCoefficients += $note->coefficient;
-    }
+        foreach ($notes as $note) {
+            $sommeNotesPonderees += $note->note * $note->coefficient;
+            $sommeCoefficients += $note->coefficient;
+        }
 
-    if ($sommeCoefficients == 0) {
-        return null;
-    }
+        if ($sommeCoefficients == 0) {
+            return null; // Pas de coefficient, impossible de calculer la moyenne
+        }
 
-    $moyenne = $sommeNotesPonderees / $sommeCoefficients;
+        $moyenne = round($sommeNotesPonderees / $sommeCoefficients, 2);
 
-    return round($moyenne, 2);
+        // Sauvegarder ou mettre à jour la moyenne dans la table `moyennes`
+        Moyenne::updateOrCreate(
+            ['etudiant_id' => $etudiantId, 'ue_id' => $ueId],
+            ['moyenne' => $moyenne]
+        );
+
+        return $moyenne;
     }
 
     public function showMoyenne($etudiantId, $ueId)
     {
-    // Récupérer les notes de l'étudiant pour cette UE
-    $notes = Note::where('etudiant_id', $etudiantId)->get()
-        ->where('ue_id', $ueId)
-        ->get();
+        $moyenne = Moyenne::where('etudiant_id', $etudiantId)
+            ->where('ue_id', $ueId)
+            ->value('moyenne'); // Récupère uniquement la colonne 'moyenne'
 
-    // Calculer la moyenne
-    $moyenne = $this->calculerMoyenneUE($notes);
+        $isValidated = $moyenne >= 10;
 
-    // Validation de l'UE (≥ 10/20)
-    $isValidated = $moyenne >= 10;
+        return view('notes.show', [
+            'moyenne' => $moyenne,
+            'is_validated' => $isValidated,
+        ]);
+    }
 
-    return view('notes.show', [
-        'notes' => $notes,
-        'moyenne' => $moyenne,
-        'is_validated' => $isValidated,
-    ]);
-}
+
 }

@@ -25,12 +25,12 @@
                 <td>{{ $note->date_evaluation }}</td>
                 <td>
                     <a href="{{ route('notes.edit', $note->id) }}" class="btn btn-sm btn-warning">Modifier</a>
-                    <a href="{{ route('notes.show', $note->id) }}" class="btn btn-sm btn-info">Afficher</a>
-                    <form action="{{ route('notes.destroy', $note->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cette note ?')">Supprimer</button>
-               </td>
+                    @if ($etudiant)
+                    <a href="{{ route('moyennes.show', ['etudiant_id' => $note->id, 'ueId' => $ue->id]) }}" class="btn btn-info">Afficher</a>
+                @else
+                    <p>L'étudiant n'est pas trouvé.</p>
+                @endif
+                                </td>
             </tr>
             @endforeach
         </tbody>

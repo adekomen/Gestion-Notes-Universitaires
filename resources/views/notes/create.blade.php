@@ -23,13 +23,27 @@
 
          <div class="form-group">
             <label for="ec_id" class="block text-sm font-medium text-gray-700 mb-2">Élément Constitutif</label>
-            <select name="ec_id" id="ec_id" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            {{-- <select name="ec_id" id="ec_id" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                 @foreach($ecs as $ec)
                     <option value="{{ $ec->id }}">{{ $ec->code }} - {{ $ec->nom }}</option>
                 @endforeach
+            </select> --}}
+        </div>
+        <div class="form-group">
+            <label for="ue_id">Unité d'Enseignement (UE)</label>
+            <select name="ue_id" id="ue_id" class="form-control" required>
+                <option value="{{ $ue->id }}">{{ $ue->nom }}</option> <!-- Afficher le nom de l'UE -->
             </select>
         </div>
 
+        <div class="form-group">
+            <label for="ec_id">Choisir un EC</label>
+            <select name="ec_id" id="ec_id" class="form-control" required>
+                @foreach($ecs as $ec)
+                    <option value="{{ $ec->id }}">{{ $ec->nom }}</option> <!-- Afficher le nom de l'EC -->
+                @endforeach
+            </select>
+        </div>
         <div class="form-group">
             <label for="date_evaluation" class="block text-sm font-medium text-gray-700 mb-2">Date de l'évaluation</label>
             <input type="date" name="date_evaluation" id="date_evaluation" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
