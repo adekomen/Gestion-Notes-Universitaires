@@ -43,7 +43,6 @@ class NoteController extends Controller
              'date_evaluation'=>'required|date',
            ]);
        //    $moyenneUE = $this->calculerMoyenneUE($validatedData['notes']);
-           //dd($validatedData);
            Note::create($validatedData);
            return redirect()->route('notes.index');
         }
