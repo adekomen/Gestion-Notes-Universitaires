@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('elements_constitutifs', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
+            $table->string('code');//->unique();
             $table->string('nom');
             $table->unsignedTinyInteger('coefficient')->checkBetween(1, 5);
             $table->foreignId('ue_id')->constrained('unites_enseignements')->onDelete('cascade');
